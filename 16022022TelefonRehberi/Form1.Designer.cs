@@ -206,6 +206,7 @@ namespace _16022022TelefonRehberi
             this.btngüncelle.TabIndex = 4;
             this.btngüncelle.Text = "Güncelle";
             this.btngüncelle.UseVisualStyleBackColor = true;
+            this.btngüncelle.Click += new System.EventHandler(this.btngüncelle_Click);
             // 
             // txtgisim
             // 
@@ -336,6 +337,7 @@ namespace _16022022TelefonRehberi
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(436, 468);
             this.listBox1.TabIndex = 6;
+            this.listBox1.Click += new System.EventHandler(this.listBox1_Click);
             // 
             // btnsil
             // 
@@ -345,6 +347,7 @@ namespace _16022022TelefonRehberi
             this.btnsil.TabIndex = 5;
             this.btnsil.Text = "Sİl";
             this.btnsil.UseVisualStyleBackColor = true;
+            this.btnsil.Click += new System.EventHandler(this.btnsil_Click);
             // 
             // txtgaciklama
             // 

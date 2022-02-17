@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
@@ -17,7 +18,7 @@ namespace _16022022TelefonRehberi
         {
             InitializeComponent();
         }
-        SqlConnection bag = new SqlConnection("server=localhost;database=TelefonRehberi;Integrated Security = true");
+        SqlConnection bag = new SqlConnection(ConfigurationManager.ConnectionStrings["baglanti"].ConnectionString);
         private void btnekle_Click(object sender, EventArgs e)
         {
             SqlCommand add = new SqlCommand("RehberEkle",bag);
@@ -83,6 +84,92 @@ namespace _16022022TelefonRehberi
             }
             bag.Close();
             listBox1.DataSource = rehberlistesi;
+        }
+
+        private void btngüncelle_Click(object sender, EventArgs e)
+        {
+            int id = ((Rehber)listBox1.SelectedItem).ID;
+            SqlCommand upd = new SqlCommand("RehberUpdt",bag);
+            upd.CommandType = CommandType.StoredProcedure;
+            upd.Parameters.AddWithValue("@ID",id);
+            upd.Parameters.AddWithValue("@Isim", txtgisim.Text);
+            upd.Parameters.AddWithValue("@Soyisim", txtgsoyisim.Text);
+            upd.Parameters.AddWithValue("@Tel1", txtgt1.Text);
+            upd.Parameters.AddWithValue("@Tel2", txtgt2.Text);
+            upd.Parameters.AddWithValue("@Email", txtgemail.Text);
+            upd.Parameters.AddWithValue("@Webadres", txtgwebadres.Text);
+            upd.Parameters.AddWithValue("@Adres", txtgadres.Text);
+            upd.Parameters.AddWithValue("@Aciklama", txtgaciklama.Text);
+            int kont = 0;
+            try
+            {
+                bag.Open();
+                kont = upd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+
+                MessageBox.Show(ex.ToString());
+            }
+            finally
+            { 
+                bag.Close();
+            }
+            
+            if (kont>0)
+            {
+                MessageBox.Show("Kayıt Güncellendi!");
+                RehberListele();
+            }
+            else
+            {
+                MessageBox.Show("Kayı Güncellenemedi!!");
+            }
+            
+        }
+
+        private void listBox1_Click(object sender, EventArgs e)
+        {
+            Rehber r = (Rehber)listBox1.SelectedItem;
+
+            txtgisim.Text = r.isim;
+            txtgsoyisim.Text = r.soyisim;
+            txtgt1.Text = r.tel1;
+            txtgt2.Text = r.tel2;
+            txtgadres.Text = r.adres;
+            txtgemail.Text = r.email;
+            txtgwebadres.Text = r.webadres;
+            txtgaciklama.Text = r.aciklama;
+
+        }
+
+        private void btnsil_Click(object sender, EventArgs e)
+        {
+            int id = ((Rehber)listBox1.SelectedItem).ID;
+            SqlCommand del = new SqlCommand("RehberDel",bag);
+            del.CommandType = CommandType.StoredProcedure;
+            del.Parameters.AddWithValue("@ID",id);
+            bag.Open();
+            int kont = del.ExecuteNonQuery();
+            bag.Close();
+            if (kont>0)
+            {
+                MessageBox.Show("Kayıt Silindi!!");
+                RehberListele();
+                txtgaciklama.Clear();
+                txtgadres.Clear();
+                txtgemail.Clear();
+                txtgisim.Clear();
+                txtgsoyisim.Clear();
+                txtgt1.Clear();
+                txtgt2.Clear();
+                txtgwebadres.Clear();
+               
+            }
+            else
+            {
+                MessageBox.Show("Kayıt Silinemedi!!");
+            }
         }
     }
 }
